@@ -7,6 +7,12 @@ export function findActiveLine(lines, seconds, lead = 0) {
   return lines.find(line => adjustedSeconds >= line.start && adjustedSeconds < line.end)?.id ?? null;
 }
 
+export const PLAYBACK_HIGHLIGHT_DELAY = 0.45;
+
+export function activeLineAtPlaybackTime(lines, seconds) {
+  return findActiveLine(lines, seconds, -PLAYBACK_HIGHLIGHT_DELAY);
+}
+
 export function toggleRevealedLine(state, lineId) {
   const revealedLines = state.revealedLines.includes(lineId)
     ? state.revealedLines.filter(id => id !== lineId)
@@ -140,7 +146,7 @@ export function createLyricsView({ root, sections, state, onSeek, onStateChange,
       render();
     },
     setCurrentTime(seconds) {
-      const nextId = findActiveLine(lines, seconds, 0.2);
+      const nextId = activeLineAtPlaybackTime(lines, seconds);
       if (nextId !== activeId) {
         const scroll = shouldAutoScroll({ autoScroll: currentState.autoScroll, activeId: nextId, previousId: activeId });
         activeId = nextId;

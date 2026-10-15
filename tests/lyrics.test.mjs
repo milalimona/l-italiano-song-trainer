@@ -7,6 +7,6 @@ test('подсветка ждёт окончания предыдущей стр
     { id: 'a', start: 10, end: 12 },
     { id: 'b', start: 12, end: 14 }
   ];
-  assert.equal(activeLineAtPlaybackTime(lines, 12.3), 'a');
-  assert.equal(activeLineAtPlaybackTime(lines, 12.45), 'b');
+  assert.equal(activeLineAtPlaybackTime(lines, 12.89), 'a');
+  assert.equal(activeLineAtPlaybackTime(lines, 12.9), 'b');
 });

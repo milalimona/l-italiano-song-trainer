@@ -1,8 +1,8 @@
-import { songData } from './song-data.js?v=27';
-import { createSessionState, createStateStore } from './state.js?v=27';
-import { createLyricsView, setAllTranslations } from './lyrics.js?v=27';
-import { createYouTubePlayer, linePlaybackStart } from './player.js?v=27';
-import { completionPercent, renderExercise, renderTrainingMenu, summaryProgress } from './exercises.js?v=27';
+import { songData } from './song-data.js?v=28';
+import { createSessionState, createStateStore } from './state.js?v=28';
+import { createLyricsView, setAllTranslations } from './lyrics.js?v=28';
+import { createYouTubePlayer, linePlaybackStart } from './player.js?v=28';
+import { completionPercent, renderExercise, renderTrainingMenu, summaryProgress } from './exercises.js?v=28';
 
 const store = createStateStore(localStorage, `trainer:v3:${songData.id}`);
 let state = createSessionState(store.load());

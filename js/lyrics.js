@@ -7,7 +7,7 @@ export function findActiveLine(lines, seconds, lead = 0) {
   return lines.find(line => adjustedSeconds >= line.start && adjustedSeconds < line.end)?.id ?? null;
 }
 
-export const PLAYBACK_HIGHLIGHT_DELAY = 0.45;
+export const PLAYBACK_HIGHLIGHT_DELAY = 0.9;
 
 export function activeLineAtPlaybackTime(lines, seconds) {
   return findActiveLine(lines, seconds, -PLAYBACK_HIGHLIGHT_DELAY);

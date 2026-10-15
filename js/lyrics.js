@@ -7,10 +7,12 @@ export function findActiveLine(lines, seconds, lead = 0) {
   return lines.find(line => adjustedSeconds >= line.start && adjustedSeconds < line.end)?.id ?? null;
 }
 
-export const PLAYBACK_HIGHLIGHT_DELAY = 0.9;
-
 export function activeLineAtPlaybackTime(lines, seconds) {
-  return findActiveLine(lines, seconds, -PLAYBACK_HIGHLIGHT_DELAY);
+  return findActiveLine(lines, seconds);
+}
+
+export function shouldHoldSelectedLine(line, seconds) {
+  return Boolean(line && seconds < line.end);
 }
 
 export function toggleRevealedLine(state, lineId) {
@@ -50,6 +52,8 @@ function el(tag, className, text) {
 export function createLyricsView({ root, sections, state, onSeek, onStateChange, scrollContainer, anchorElement }) {
   const lines = flattenLines(sections);
   let activeId = null;
+  let selectedLine = null;
+  let awaitingSelectedSeek = false;
   let currentState = state;
 
   function persist() {
@@ -63,6 +67,10 @@ export function createLyricsView({ root, sections, state, onSeek, onStateChange,
     const line = lines.find(item => item.id === target.dataset.lineId);
     if (!line) return;
     if (target.classList.contains('lyric-line--italian')) {
+      selectedLine = line;
+      awaitingSelectedSeek = true;
+      activeId = line.id;
+      highlight(activeId, false);
       onSeek(line.start, line.end);
       return;
     }
@@ -146,6 +154,14 @@ export function createLyricsView({ root, sections, state, onSeek, onStateChange,
       render();
     },
     setCurrentTime(seconds) {
+      if (selectedLine) {
+        if (awaitingSelectedSeek) {
+          if (seconds <= selectedLine.end) awaitingSelectedSeek = false;
+          else return;
+        }
+        if (shouldHoldSelectedLine(selectedLine, seconds)) return;
+        selectedLine = null;
+      }
       const nextId = activeLineAtPlaybackTime(lines, seconds);
       if (nextId !== activeId) {
         const scroll = shouldAutoScroll({ autoScroll: currentState.autoScroll, activeId: nextId, previousId: activeId });

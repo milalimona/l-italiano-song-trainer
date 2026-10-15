@@ -7,12 +7,12 @@ export function findActiveLine(lines, seconds, lead = 0) {
   return lines.find(line => adjustedSeconds >= line.start && adjustedSeconds < line.end)?.id ?? null;
 }
 
-export function activeLineAtPlaybackTime(lines, seconds) {
-  return findActiveLine(lines, seconds);
+export function activeLineAtPlaybackTime(lines, seconds, syncOffset = 0) {
+  return findActiveLine(lines, seconds, -syncOffset);
 }
 
-export function shouldHoldSelectedLine(line, seconds) {
-  return Boolean(line && seconds < line.end);
+export function shouldHoldSelectedLine(line, seconds, syncOffset = 0) {
+  return Boolean(line && seconds < line.end + syncOffset);
 }
 
 export function toggleRevealedLine(state, lineId) {
@@ -49,7 +49,7 @@ function el(tag, className, text) {
   return node;
 }
 
-export function createLyricsView({ root, sections, state, onSeek, onStateChange, scrollContainer, anchorElement }) {
+export function createLyricsView({ root, sections, state, onSeek, onStateChange, scrollContainer, anchorElement, playbackSyncOffset = 0 }) {
   const lines = flattenLines(sections);
   let activeId = null;
   let selectedLine = null;
@@ -159,10 +159,10 @@ export function createLyricsView({ root, sections, state, onSeek, onStateChange,
           if (seconds <= selectedLine.end) awaitingSelectedSeek = false;
           else return;
         }
-        if (shouldHoldSelectedLine(selectedLine, seconds)) return;
+        if (shouldHoldSelectedLine(selectedLine, seconds, playbackSyncOffset)) return;
         selectedLine = null;
       }
-      const nextId = activeLineAtPlaybackTime(lines, seconds);
+      const nextId = activeLineAtPlaybackTime(lines, seconds, playbackSyncOffset);
       if (nextId !== activeId) {
         const scroll = shouldAutoScroll({ autoScroll: currentState.autoScroll, activeId: nextId, previousId: activeId });
         activeId = nextId;

@@ -13,6 +13,7 @@ export const songData = {
   title: 'L’italiano',
   artist: 'Toto Cutugno',
   youtubeId: 'TYtdYslLY9I',
+  playbackSyncOffset: 0.9,
   sections: [
     { id: 'intro', lines: [
       L(0.17, 4.10, 'Lasciatemi cantare', 'Позвольте мне спеть'),

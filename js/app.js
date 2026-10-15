@@ -1,8 +1,8 @@
-import { songData } from './song-data.js?v=29';
-import { createSessionState, createStateStore } from './state.js?v=29';
-import { createLyricsView, setAllTranslations } from './lyrics.js?v=29';
-import { createYouTubePlayer, linePlaybackStart } from './player.js?v=29';
-import { completionPercent, renderExercise, renderTrainingMenu, summaryProgress } from './exercises.js?v=29';
+import { songData } from './song-data.js?v=30';
+import { createSessionState, createStateStore } from './state.js?v=30';
+import { createLyricsView, setAllTranslations } from './lyrics.js?v=30';
+import { createYouTubePlayer, linePlaybackStart } from './player.js?v=30';
+import { completionPercent, renderExercise, renderTrainingMenu, summaryProgress } from './exercises.js?v=30';
 
 const store = createStateStore(localStorage, `trainer:v3:${songData.id}`);
 let state = createSessionState(store.load());
@@ -35,6 +35,7 @@ const lyricsView = createLyricsView({
   state,
   scrollContainer: document.querySelector('#listen-view'),
   anchorElement: document.querySelector('.media-panel'),
+  playbackSyncOffset: songData.playbackSyncOffset,
   onSeek(start, end) {
     if (playerApi) playerApi.seekTo(linePlaybackStart(start));
   },

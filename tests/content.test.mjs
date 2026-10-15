@@ -10,6 +10,7 @@ test('содержит весь текст с переводом и точным
   assert.ok(lines.every(line => line.it && line.ru && line.end > line.start));
   assert.equal(new Set(lines.map(line => line.id)).size, 52);
   assert.ok(lines.every((line, index) => index === 0 || line.start >= lines[index - 1].start));
+  assert.equal(songData.playbackSyncOffset, 0.9);
 });
 
 test('содержит восемь разделов и 64 разнообразных упражнения', () => {
